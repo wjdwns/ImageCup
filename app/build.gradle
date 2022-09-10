@@ -20,9 +20,15 @@ android {
     }
 
     buildTypes {
+        debug {
+            minifyEnabled false
+            debuggable true
+            buildConfigField 'boolean', 'IS_DEBUG', 'true'
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField 'boolean', 'IS_DEBUG', 'false'
         }
     }
     compileOptions {
@@ -39,7 +45,6 @@ android {
 
 dependencies {
 
-    implementation Dependencies.coreKtx
     implementation Dependencies.appcompat
     implementation Dependencies.material
     implementation Dependencies.constraintLayout
@@ -47,4 +52,15 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation Dependencies.testExtJunit
     androidTestImplementation Dependencies.espressoCore
+
+    implementation Dependencies.coreKtx
+    implementation Dependencies.activityKtx
+    implementation Dependencies.fragmentKtx
+    implementation Dependencies.lifecycleKtx
+    implementation Dependencies.navRuntime
+    implementation Dependencies.navFragment
+    implementation Dependencies.navUi
+    implementation Dependencies.viewModelKtx
+
+    implementation Dependencies.timber
 }

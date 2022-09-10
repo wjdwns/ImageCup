@@ -1,5 +1,5 @@
 object Dependencies {
-    private const val CORE_KTX = "1.7.0"
+    private const val CORE_KTX = "1.9.0"
     const val coreKtx = "androidx.core:core-ktx:$CORE_KTX"
 
     private const val APPCOMPAT = "1.5.1"
@@ -19,4 +19,24 @@ object Dependencies {
 
     private const val ESPRESSO_CORE = "3.4.0"
     const val espressoCore = "androidx.test.espresso:espresso-core:$ESPRESSO_CORE"
+
+    private const val ACTIVITY_KTX = "1.5.1"
+    const val activityKtx = "androidx.activity:activity-ktx:$ACTIVITY_KTX"
+
+    private const val FRAGMENT_KTX = "1.5.2"
+    const val fragmentKtx = "androidx.fragment:fragment-ktx:$FRAGMENT_KTX"
+
+    private const val LIFECYCLE_KTX = "2.6.0-alpha01"
+    const val lifecycleKtx = "androidx.lifecycle:lifecycle-runtime-ktx:$LIFECYCLE_KTX"
+
+    private const val NAV_VERSION = "2.5.1"
+    const val navRuntime = "androidx.navigation:navigation-runtime-ktx:$NAV_VERSION"
+    const val navFragment = "androidx.navigation:navigation-fragment-ktx:$NAV_VERSION"
+    const val navUi = "androidx.navigation:navigation-ui-ktx:$NAV_VERSION"
+
+    private const val VIEW_MODEL_KTX = "2.6.0-alpha02"
+    const val viewModelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:$VIEW_MODEL_KTX"
+
+    private const val TIMBER = "5.0.1"
+    const val timber = "com.jakewharton.timber:timber:$TIMBER"
 }
