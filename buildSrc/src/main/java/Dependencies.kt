@@ -39,4 +39,10 @@ object Dependencies {
 
     private const val TIMBER = "5.0.1"
     const val timber = "com.jakewharton.timber:timber:$TIMBER"
+
+    private const val GLIDE = "4.13.2"
+    const val glide = "com.github.bumptech.glide:glide:$GLIDE"
+    const val glideCompiler = "com.github.bumptech.glide:compiler:$GLIDE"
+
+
 }
