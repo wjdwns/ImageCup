@@ -63,4 +63,7 @@ dependencies {
     implementation Dependencies.viewModelKtx
 
     implementation Dependencies.timber
+
+    implementation Dependencies.glide
+    annotationProcessor Dependencies.glideCompiler
 }
