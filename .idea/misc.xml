@@ -8,6 +8,7 @@
         <entry key="app/src/main/res/layout/fragment_album.xml" value="0.1046875" />
         <entry key="app/src/main/res/layout/fragment_gallery.xml" value="0.2636363636363636" />
         <entry key="app/src/main/res/layout/fragment_ranking.xml" value="0.1046875" />
+        <entry key="app/src/main/res/layout/item_gallery.xml" value="0.10572916666666667" />
         <entry key="app/src/main/res/menu/main_navigation.xml" value="0.10572916666666667" />
       </map>
     </option>

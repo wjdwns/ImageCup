@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
+import androidx.databinding.adapters.ViewGroupBindingAdapter.setListener
 import androidx.fragment.app.Fragment
 import com.example.imagecup.R
 import com.example.imagecup.databinding.ActivityMainBinding
@@ -17,15 +18,13 @@ class MainActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
 
         initView()
+        setListener()
     }
     private fun initView(){
-        fun replaceFragment(fragment: Fragment) {
-            val fragmentTransaction = supportFragmentManager.beginTransaction()
-            fragmentTransaction.replace(R.id.main_FL, fragment)
-            fragmentTransaction.commit()
-        }
         replaceFragment(GalleryFragment())
+    }
 
+    private fun setListener(){
         binding.mainBottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.photo -> {
@@ -44,6 +43,11 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
+    }
+    private fun replaceFragment(fragment: Fragment) {
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.main_FL, fragment)
+        fragmentTransaction.commit()
     }
 
 

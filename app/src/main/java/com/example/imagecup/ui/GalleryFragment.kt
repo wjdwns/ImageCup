@@ -14,7 +14,7 @@ import com.example.imagecup.ui.adapter.GalleryAdapter
 import timber.log.Timber
 
 class GalleryFragment : BaseFragment<FragmentGalleryBinding>(R.layout.fragment_gallery) {
-    private val viewModel: GalleryViewModel by viewModels()
+    private val viewModel: MainViewModel by viewModels()
     private lateinit var myAdapter: GalleryAdapter
 
     override fun createView(binding: FragmentGalleryBinding) {
@@ -24,11 +24,11 @@ class GalleryFragment : BaseFragment<FragmentGalleryBinding>(R.layout.fragment_g
     }
 
     override fun viewCreated() {
-        binding.vm = viewModel
+        getGalleryPermission()
     }
 
     private fun initView() {
-        getGalleryPermission()
+
     }
 
     private fun setListener() {
