@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/photo"
+        android:icon="@drawable/ic_gallery"
+        android:enabled="true"
+        android:title="@string/gallery"/>
+    <item
+        android:id="@+id/album"
+        android:icon="@drawable/ic_label"
+        android:enabled="true"
+        android:title="@string/album"/>
+    <item
+        android:id="@+id/ranking"
+        android:icon="@drawable/ic_ranking"
+        android:enabled="true"
+        android:title="@string/ranking"/>
+</menu>
