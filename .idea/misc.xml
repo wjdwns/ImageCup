@@ -4,9 +4,11 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable/bottom_navigation_color.xml" value="0.116" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.2996927897135417" />
+        <entry key="app/src/main/res/drawable/gallery_selected_background.xml" value="0.1855" />
+        <entry key="app/src/main/res/drawable/gallery_selector.xml" value="0.1855" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.2244415283203125" />
         <entry key="app/src/main/res/layout/fragment_album.xml" value="0.1046875" />
-        <entry key="app/src/main/res/layout/fragment_gallery.xml" value="0.23061828613281254" />
+        <entry key="app/src/main/res/layout/fragment_gallery.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_ranking.xml" value="0.1046875" />
         <entry key="app/src/main/res/layout/item_gallery.xml" value="0.10572916666666667" />
         <entry key="app/src/main/res/menu/main_navigation.xml" value="0.10572916666666667" />

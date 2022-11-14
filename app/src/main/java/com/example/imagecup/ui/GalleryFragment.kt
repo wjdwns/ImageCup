@@ -4,13 +4,16 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.provider.MediaStore
+import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.depromeet.housekeeper.base.BaseFragment
 import com.example.imagecup.R
 import com.example.imagecup.databinding.FragmentGalleryBinding
 import com.example.imagecup.ui.adapter.GalleryAdapter
+import kotlinx.coroutines.flow.collectLatest
 import timber.log.Timber
 
 class GalleryFragment : BaseFragment<FragmentGalleryBinding>(R.layout.fragment_gallery) {
@@ -19,8 +22,9 @@ class GalleryFragment : BaseFragment<FragmentGalleryBinding>(R.layout.fragment_g
 
     override fun createView(binding: FragmentGalleryBinding) {
         initView()
-        setListener()
         setAdapter()
+        setListener()
+        bindingVm()
     }
 
     override fun viewCreated() {
@@ -32,7 +36,9 @@ class GalleryFragment : BaseFragment<FragmentGalleryBinding>(R.layout.fragment_g
     }
 
     private fun setListener() {
+        binding.ivSelectComplete.setOnClickListener {
 
+        }
     }
     private fun setAdapter(){
         val gridLayoutManager = GridLayoutManager(requireContext(), 3)
@@ -67,6 +73,16 @@ class GalleryFragment : BaseFragment<FragmentGalleryBinding>(R.layout.fragment_g
             Timber.d("퍼미션 허용됨")
         }
     }
+    private fun bindingVm(){
+        lifecycleScope.launchWhenCreated {
+            viewModel.photoUri.collectLatest {
+                Timber.d("size : ${it.size}")
+                val format = String.format(getString(R.string.selected), it.size)
+                binding.tvSelectedPhoto.text = format
+            }
+        }
+
+    }
     private fun getAllPhotos(){
         val cursor = requireContext().contentResolver.query(
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
@@ -84,6 +100,13 @@ class GalleryFragment : BaseFragment<FragmentGalleryBinding>(R.layout.fragment_g
             cursor.close()
         }
         myAdapter = GalleryAdapter(uriArr)
+        Timber.d("uriArr : $uriArr")
         binding.rvGallery.adapter = myAdapter
+        myAdapter.setItemClickListener(object :GalleryAdapter.OnItemClickListener{
+            override fun onClick(v: View, photo_uri: String, position: Int) {
+                v.isSelected = !v.isSelected
+                viewModel.updatePhoto(photo_uri, v.isSelected)
+            }
+        })
     }
 }

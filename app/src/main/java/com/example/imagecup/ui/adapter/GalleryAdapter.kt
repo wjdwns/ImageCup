@@ -1,6 +1,7 @@
 package com.example.imagecup.ui.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
@@ -8,6 +9,14 @@ import com.bumptech.glide.Glide
 import com.example.imagecup.databinding.ItemGalleryBinding
 
 class GalleryAdapter(private val uriArr:List<String>) : RecyclerView.Adapter<GalleryAdapter.ItemViewHolder>(){
+
+    interface OnItemClickListener {
+        fun onClick(v: View, photo_uri: String, position: Int)
+    }
+    private lateinit var itemClickListener: OnItemClickListener
+    fun setItemClickListener(itemClickListener: OnItemClickListener) {
+        this.itemClickListener = itemClickListener
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         return ItemViewHolder(
@@ -32,6 +41,12 @@ class GalleryAdapter(private val uriArr:List<String>) : RecyclerView.Adapter<Gal
             Glide.with(binding.root)
                 .load(uri)
                 .into(binding.ivImage)
+            val pos = adapterPosition
+            if (pos != RecyclerView.NO_POSITION) {
+                binding.ivImage.setOnClickListener {
+                    itemClickListener.onClick(itemView, uri, pos)
+                }
+            }
         }
     }
 }
