@@ -1,14 +1,15 @@
 package com.example.imagecup.ui
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class MainViewModel : ViewModel() {
-    private val _photoUri : MutableStateFlow<List<String>> = MutableStateFlow(emptyList())
-    val photoUri : MutableStateFlow<List<String>>
+    private val _photoUri : MutableStateFlow<List<Uri>> = MutableStateFlow(emptyList())
+    val photoUri : MutableStateFlow<List<Uri>>
         get() = _photoUri
 
-    fun updatePhoto(photo: String, isSelect: Boolean) {
+    fun updatePhoto(photo: Uri, isSelect: Boolean) {
         when {
             isSelect -> if (!_photoUri.value.contains(photo)) {
                 _photoUri.value = _photoUri.value.plus(photo)
@@ -18,4 +19,6 @@ class MainViewModel : ViewModel() {
             }
         }
     }
+
+
 }

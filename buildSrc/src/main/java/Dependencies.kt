@@ -44,5 +44,27 @@ object Dependencies {
     const val glide = "com.github.bumptech.glide:glide:$GLIDE"
     const val glideCompiler = "com.github.bumptech.glide:compiler:$GLIDE"
 
+    private const val HILT = "2.44"
+    const val hiltAndroid = "com.google.dagger:hilt-android:$HILT"
+    const val hiltCompiler = "com.google.dagger:hilt-compiler:$HILT"
+
+    private const val OKHTTP = "4.3.1"
+    const val okhttp = "com.squareup.okhttp3:okhttp:OKHTTP"
+    const val okhttpLogging = "com.squareup.okhttp3:logging-interceptor:$OKHTTP"
+
+    private const val RETROFIT = "2.9.0"
+    const val retrofit = "com.squareup.retrofit2:retrofit:$RETROFIT"
+    const val retrofitAdapter = "com.squareup.retrofit2:adapter-rxjava2:$RETROFIT"
+    const val moshiConverter = "com.squareup.retrofit2:converter-moshi:$RETROFIT"
+
+    private const val COROUTINE_ADAPTER = "0.9.2"
+    const val coroutineAdapter =
+        "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:$COROUTINE_ADAPTER"
+
+    private const val MOSHI = "1.14.0"
+    const val moshi = "com.squareup.moshi:moshi:$MOSHI"
+    const val moshiKotlin = "com.squareup.moshi:moshi-kotlin:$MOSHI"
+    const val moshiCodegen = "com.squareup.moshi:moshi-kotlin-codegen:$MOSHI"
+
 
 }

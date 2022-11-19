@@ -8,7 +8,9 @@ import androidx.databinding.adapters.ViewGroupBindingAdapter.setListener
 import androidx.fragment.app.Fragment
 import com.example.imagecup.R
 import com.example.imagecup.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModels()
     lateinit var binding: ActivityMainBinding
@@ -41,7 +43,6 @@ class MainActivity : AppCompatActivity() {
                 }
                 else -> return@setOnItemSelectedListener false
             }
-
         }
     }
     private fun replaceFragment(fragment: Fragment) {
