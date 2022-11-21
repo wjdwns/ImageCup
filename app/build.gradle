@@ -2,7 +2,8 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id("kotlin-android")
-    id("kotlin-kapt")
+    id 'kotlin-kapt'
+    id 'com.google.dagger.hilt.android'
 }
 
 android {
@@ -66,4 +67,22 @@ dependencies {
 
     implementation Dependencies.glide
     annotationProcessor Dependencies.glideCompiler
+
+    implementation Dependencies.hiltAndroid
+    kapt Dependencies.hiltCompiler
+
+    implementation Dependencies.okhttp
+    implementation Dependencies.okhttpLogging
+
+    implementation Dependencies.retrofit
+    implementation Dependencies.retrofitAdapter
+    implementation Dependencies.moshiConverter
+    implementation Dependencies.coroutineAdapter
+
+    implementation Dependencies.moshi
+    implementation Dependencies.moshiKotlin
+    kapt Dependencies.moshiCodegen
+}
+kapt{
+    correctErrorTypes true
 }
