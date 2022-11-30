@@ -2,8 +2,10 @@ package com.example.imagecup.ui
 
 import android.app.AlertDialog
 import android.content.ContentResolver
+import android.content.Context
 import android.content.DialogInterface
 import android.content.pm.PackageManager
+import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
@@ -20,12 +22,23 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.depromeet.housekeeper.base.BaseFragment
 import com.example.imagecup.R
 import com.example.imagecup.databinding.FragmentGalleryBinding
+import com.example.imagecup.model.ObjectDetectRequest
+import com.example.imagecup.model.Photo
 import com.example.imagecup.ui.adapter.GalleryAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.internal.notify
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
+import java.io.File
 import java.io.InputStream
 
+@AndroidEntryPoint
 class GalleryFragment : BaseFragment<FragmentGalleryBinding>(R.layout.fragment_gallery) {
     private val viewModel: MainViewModel by viewModels()
     private lateinit var myAdapter: GalleryAdapter
@@ -46,8 +59,7 @@ class GalleryFragment : BaseFragment<FragmentGalleryBinding>(R.layout.fragment_g
 
     private fun setListener() {
         binding.ivSelectComplete.setOnClickListener {
-            imageEncoding(viewModel.photoUri.value)
-
+            imageToFile(viewModel.photoUri.value)
         }
     }
     private fun setAdapter(){
@@ -72,7 +84,6 @@ class GalleryFragment : BaseFragment<FragmentGalleryBinding>(R.layout.fragment_g
                 }
                 permissionAlert.setNegativeButton("no") { _: DialogInterface?, _: Int -> activity?.finish() }
                 permissionAlert.show()
-                false
             } else {
                 ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
                     0x01)
@@ -91,6 +102,16 @@ class GalleryFragment : BaseFragment<FragmentGalleryBinding>(R.layout.fragment_g
                 binding.tvSelectedPhoto.text = format
             }
         }
+        lifecycleScope.launchWhenCreated {
+            viewModel.loading.collectLatest {
+                if(it){
+                    binding.progressBar.visibility = View.VISIBLE
+                }
+                else{
+                    binding.progressBar.visibility = View.INVISIBLE
+                }
+            }
+        }
 
     }
     private fun getAllPhotos(){
@@ -101,18 +122,6 @@ class GalleryFragment : BaseFragment<FragmentGalleryBinding>(R.layout.fragment_g
             null,
             MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC")
         val uriArr = ArrayList<Uri>()
-//        cursor?.use { cursor ->
-//            val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-//
-//            while (cursor.moveToNext()) {
-//                val id = cursor.getLong(idColumn)
-//                val contentUri = Uri.withAppendedPath(
-//                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-//                    id.toString()
-//                )
-//                uriArr.add(contentUri)
-//            }
-//        }
         if(cursor!=null){
             while(cursor.moveToNext()){
                 // 사진 경로 Uri 가져오기
@@ -129,35 +138,26 @@ class GalleryFragment : BaseFragment<FragmentGalleryBinding>(R.layout.fragment_g
                 if(viewModel.photoUri.value.size<10){
                     v.isSelected = !v.isSelected
                     viewModel.updatePhoto(photo_uri, v.isSelected)
+                    Timber.d("photo uri : $photo_uri")
                 }
                 else if(viewModel.photoUri.value.size==10 && v.isSelected)
                 {
                     v.isSelected = !v.isSelected
                     viewModel.updatePhoto(photo_uri, v.isSelected)
                 }
-
             }
         })
     }
-    private fun imageEncoding(imageList : List<Uri>): List<String?> {
-        val imageEncodingList : List<String> = listOf()
+    private fun imageToFile(imageList : List<Uri>) {
+        var imageFiles : List<MultipartBody.Part> = listOf()
         for(element in imageList){
-            val uri = Uri.parse("file://"+element.path);
-            Timber.d("uri : $uri")
-//            val ins: InputStream? = uri.let {
-//                context?.contentResolver?.openInputStream(it)
-//            }
-//            val img: Bitmap = BitmapFactory.decodeStream(ins)
-//            ins?.close()
-            val img : Bitmap = ImageDecoder.decodeBitmap(ImageDecoder.createSource(requireContext().contentResolver,uri))
-            val resized = Bitmap.createScaledBitmap(img, 256, 256, true)
-            val byteArrayOutputStream = ByteArrayOutputStream()
-            resized.compress(Bitmap.CompressFormat.JPEG, 60, byteArrayOutputStream)
-            val byteArray: ByteArray = byteArrayOutputStream.toByteArray()
-            Timber.d("${Base64.encodeToString(byteArray, NO_WRAP)}")
-            //imageEncodingList.plus(Base64.encodeToString(byteArray, Base64.DEFAULT))
+            val file =  File(element.toString())
+            val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+            val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
+            imageFiles = imageFiles.plus(body)
         }
-        Timber.d("image List : $imageEncodingList")
-        return imageEncodingList
+        viewModel.objectDetect(imageFiles)
+        myAdapter.dataChanged()
+        Timber.d("file : $imageFiles")
     }
 }

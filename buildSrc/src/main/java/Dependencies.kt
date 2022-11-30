@@ -56,6 +56,7 @@ object Dependencies {
     const val retrofit = "com.squareup.retrofit2:retrofit:$RETROFIT"
     const val retrofitAdapter = "com.squareup.retrofit2:adapter-rxjava2:$RETROFIT"
     const val moshiConverter = "com.squareup.retrofit2:converter-moshi:$RETROFIT"
+    const val retrofitConverter = "com.squareup.retrofit2:converter-gson:$RETROFIT"
 
     private const val COROUTINE_ADAPTER = "0.9.2"
     const val coroutineAdapter =
@@ -65,6 +66,15 @@ object Dependencies {
     const val moshi = "com.squareup.moshi:moshi:$MOSHI"
     const val moshiKotlin = "com.squareup.moshi:moshi-kotlin:$MOSHI"
     const val moshiCodegen = "com.squareup.moshi:moshi-kotlin-codegen:$MOSHI"
+
+    private const val SERIALIZATION = "1.3.2"
+    const val serialization = "org.jetbrains.kotlinx:kotlinx-serialization-json:$SERIALIZATION"
+
+    private const val ROOM = "2.4.3"
+    const val roomRuntime = "androidx.room:room-runtime:$ROOM"
+    const val roomCompiler = "androidx.room:room-compiler:$ROOM"
+    const val roomKtx = "androidx.room:room-ktx:$ROOM"
+    const val roomGuava = "androidx.room:room-guava:$ROOM"
 
 
 }
