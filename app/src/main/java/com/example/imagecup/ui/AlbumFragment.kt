@@ -9,6 +9,8 @@ import com.example.imagecup.R
 import com.example.imagecup.databinding.FragmentAlbumBinding
 import com.example.imagecup.model.AlbumResponse
 import com.example.imagecup.ui.adapter.AlbumAdapter
+import android.content.Context
+
 
 class AlbumFragment : BaseFragment<FragmentAlbumBinding>(R.layout.fragment_album) {
     private val viewModel : MainViewModel by viewModels()
@@ -17,13 +19,20 @@ class AlbumFragment : BaseFragment<FragmentAlbumBinding>(R.layout.fragment_album
         initView()
         setAdapter()
     }
+    var mainActivity: MainActivity? = null
 
+
+    override fun onAttach(context:Context){
+        super.onAttach(context)
+        mainActivity = context as MainActivity
+    }
     override fun viewCreated() {
     }
 
     private fun initView(){
     }
     private fun setAdapter(){
+
         val gridLayoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvAlbum.layoutManager = gridLayoutManager
         myAdapter = AlbumAdapter(listOf(
@@ -33,6 +42,7 @@ class AlbumFragment : BaseFragment<FragmentAlbumBinding>(R.layout.fragment_album
         binding.rvAlbum.adapter = myAdapter
         myAdapter.setItemClickListener(object :AlbumAdapter.OnItemClickListener{
             override fun onClick(v: View, label: String, position: Int) {
+                //mainActivity?.fragmentToFragment(1)
             }
         })
     }
