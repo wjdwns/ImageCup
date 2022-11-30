@@ -41,7 +41,6 @@ class AlbumLabelFragment : BaseFragment<FragmentAlbumLabelBinding>(R.layout.frag
                 }
                 permissionAlert.setNegativeButton("no") { _: DialogInterface?, _: Int -> activity?.finish() }
                 permissionAlert.show()
-                false
             } else {
                 ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
                     0x01)

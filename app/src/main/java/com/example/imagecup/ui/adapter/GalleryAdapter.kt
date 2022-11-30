@@ -29,6 +29,9 @@ class GalleryAdapter(private val uriArr: List<Uri>) :
             )
         )
     }
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
 
     override fun onBindViewHolder(holder:ItemViewHolder, position: Int) {
         holder.bind(uriArr[position])
@@ -50,5 +53,8 @@ class GalleryAdapter(private val uriArr: List<Uri>) :
                 }
             }
         }
+    }
+    fun dataChanged(){
+        notifyDataSetChanged()
     }
 }
