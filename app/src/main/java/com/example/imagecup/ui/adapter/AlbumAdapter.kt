@@ -15,7 +15,7 @@ class AlbumAdapter(private val photos: List<Photo>) :
         fun onClick(v: View, label: String, position: Int)
     }
 
-    private var itemClickListener: OnItemClickListener? = null
+    private lateinit var itemClickListener: OnItemClickListener
     fun setItemClickListener(itemClickListener: OnItemClickListener) {
         this.itemClickListener = itemClickListener
     }
@@ -43,6 +43,15 @@ class AlbumAdapter(private val photos: List<Photo>) :
                 .load(photo.title)
                 .into(binding.ivAlbumImage)
             binding.tvAlbumLabel.text = photo.label
+
+            val pos = adapterPosition
+            if (pos != RecyclerView.NO_POSITION) {
+                binding.ivAlbumImage.setOnClickListener {
+                    itemClickListener!!.onClick(itemView, photo.label, pos)
+                }
+            }
         }
+
+
     }
 }
