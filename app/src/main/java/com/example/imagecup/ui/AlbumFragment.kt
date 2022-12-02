@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
+
 @AndroidEntryPoint
 class AlbumFragment : BaseFragment<FragmentAlbumBinding>(R.layout.fragment_album) {
     private val viewModel : MainViewModel by viewModels()
@@ -50,6 +51,7 @@ class AlbumFragment : BaseFragment<FragmentAlbumBinding>(R.layout.fragment_album
 
     }
     private fun setAdapter(){
+
         val gridLayoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvAlbum.layoutManager = gridLayoutManager
         myAdapter = AlbumAdapter(emptyList())
