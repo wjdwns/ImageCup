@@ -8,6 +8,7 @@ import com.depromeet.housekeeper.base.BaseFragment
 import com.example.imagecup.R
 import com.example.imagecup.databinding.FragmentResultBinding
 import com.example.imagecup.ui.adapter.AlbumAdapter
+import com.example.imagecup.ui.adapter.ResultAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import timber.log.Timber
@@ -15,6 +16,8 @@ import timber.log.Timber
 @AndroidEntryPoint
 class ResultFragment : BaseFragment<FragmentResultBinding>(R.layout.fragment_result) {
     private val viewModel : MainViewModel by viewModels()
+    private lateinit var myAdapter: ResultAdapter
+    val labels = listOf("강아지","고양이","자동차","사람","이동수단","도로","주방도구","가방","도구","식품","운동기구","가구","전자기기","동물","새","곰","기타")
     override fun createView(binding: FragmentResultBinding) {
         initView()
         setAdapter()
@@ -29,11 +32,25 @@ class ResultFragment : BaseFragment<FragmentResultBinding>(R.layout.fragment_res
     }
 
     private fun bindingVm(){
-
+        lifecycleScope.launchWhenCreated {
+            viewModel.labels.collectLatest {
+                myAdapter = ResultAdapter(labels)
+                binding.rvRanking.adapter = myAdapter
+                myAdapter.notifyDataSetChanged()
+                myAdapter.setItemClickListener(object :ResultAdapter.OnItemClickListener{
+                    override fun onClick(v: View, label: String, position: Int) {
+                        (activity as MainActivity).replaceFragment(ResultLabelFragment())
+                    }
+                })
+            }
+        }
     }
 
     private fun setAdapter(){
-        val gridLayoutManager = GridLayoutManager(requireContext(), 2)
+        val gridLayoutManager = GridLayoutManager(requireContext(), 1)
+        binding.rvRanking.layoutManager = gridLayoutManager
+        myAdapter = ResultAdapter(labels)
+        binding.rvRanking.adapter = myAdapter
 
     }
 }
