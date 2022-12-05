@@ -40,7 +40,9 @@
             android:scrollbars="vertical"
             android:scrollbarFadeDuration="0"
             tools:listitem="@layout/item_ranking"
-            app:layout_constraintTop_toBottomOf="@id/tv_script" />
+            app:layout_constraintTop_toBottomOf="@id/tv_script"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
