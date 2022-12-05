@@ -36,6 +36,16 @@ class MainViewModel @Inject constructor(
     val labels : StateFlow<List<Photo>>
         get() = _labels
 
+    private val _albumPhotos : MutableStateFlow<List<Photo>> = MutableStateFlow(emptyList())
+    val albumPhotos : StateFlow<List<Photo>>
+        get() = _albumPhotos
+
+    private val _uploadPhoto : MutableStateFlow<Photo?> = MutableStateFlow(null)
+    val uploadPhoto : StateFlow<Photo?>
+        get() = _uploadPhoto
+
+
+
     fun getAllLabels(){
         viewModelScope.launch {
             _labels.value = repository.getAllLabels()
@@ -75,7 +85,14 @@ class MainViewModel @Inject constructor(
         _loading.value = false
     }
 
+    fun getAlbumPhotos(label : String){
+        viewModelScope.launch {
+            _albumPhotos.value = repository.getAllPhotos(label)
+        }
+    }
 
-
+    fun setUploadPhoto(photo: Photo?){
+        _uploadPhoto.value = photo
+    }
 
 }

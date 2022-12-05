@@ -10,6 +10,7 @@ import com.example.imagecup.R
 import com.example.imagecup.databinding.FragmentAlbumBinding
 import com.example.imagecup.ui.adapter.AlbumAdapter
 import android.content.Context
+import android.os.Bundle
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import timber.log.Timber
@@ -38,7 +39,12 @@ class AlbumFragment : BaseFragment<FragmentAlbumBinding>(R.layout.fragment_album
                 myAdapter.notifyDataSetChanged()
                 myAdapter.setItemClickListener(object : AlbumAdapter.OnItemClickListener {
                     override fun onClick(v: View, label: String, position: Int) {
-                        (activity as MainActivity).replaceFragment(AlbumLabelFragment())
+                        Timber.d("Click $label")
+                        var fragment = AlbumLabelFragment()
+                        var bundle = Bundle()
+                        bundle.putString("label", label)
+                        fragment.arguments = bundle
+                        (activity as MainActivity).replaceFragment(fragment)
                     }
                 })
             }
@@ -60,12 +66,6 @@ class AlbumFragment : BaseFragment<FragmentAlbumBinding>(R.layout.fragment_album
         binding.rvAlbum.layoutManager = gridLayoutManager
         myAdapter = AlbumAdapter(emptyList())
         binding.rvAlbum.adapter = myAdapter
-        myAdapter.setItemClickListener(object :AlbumAdapter.OnItemClickListener{
-            override fun onClick(v: View, label: String, position: Int) {
-                //mainActivity?.fragmentToFragment(1)
-            }
-        })
-
     }
 
 }
