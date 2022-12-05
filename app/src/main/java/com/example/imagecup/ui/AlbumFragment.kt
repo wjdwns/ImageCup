@@ -12,6 +12,7 @@ import com.example.imagecup.databinding.FragmentAlbumBinding
 import com.example.imagecup.model.AlbumResponse
 import com.example.imagecup.model.Photo
 import com.example.imagecup.ui.adapter.AlbumAdapter
+import android.content.Context
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -41,7 +42,13 @@ class AlbumFragment : BaseFragment<FragmentAlbumBinding>(R.layout.fragment_album
             }
         }
     }
+    var mainActivity: MainActivity? = null
 
+
+    override fun onAttach(context:Context){
+        super.onAttach(context)
+        mainActivity = context as MainActivity
+    }
     override fun viewCreated() {
         viewModel.getAllLabels()
     }
@@ -54,6 +61,11 @@ class AlbumFragment : BaseFragment<FragmentAlbumBinding>(R.layout.fragment_album
         binding.rvAlbum.layoutManager = gridLayoutManager
         myAdapter = AlbumAdapter(emptyList())
         binding.rvAlbum.adapter = myAdapter
+        myAdapter.setItemClickListener(object :AlbumAdapter.OnItemClickListener{
+            override fun onClick(v: View, label: String, position: Int) {
+                //mainActivity?.fragmentToFragment(1)
+            }
+        })
 
     }
 

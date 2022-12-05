@@ -10,6 +10,7 @@ import com.example.imagecup.R
 import com.example.imagecup.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
+
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModels()
@@ -45,11 +46,16 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
     private fun replaceFragment(fragment: Fragment) {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.main_FL, fragment)
         fragmentTransaction.commit()
     }
 
-
-}
+    fun fragmentToFragment(int :Int){
+        when(int){
+            1 -> replaceFragment(GalleryFragment())
+        }
+    }
+        }
