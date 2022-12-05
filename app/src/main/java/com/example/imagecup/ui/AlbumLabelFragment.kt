@@ -1,80 +1,96 @@
 package com.example.imagecup.ui
 
-import android.app.AlertDialog
-import android.content.DialogInterface
-import android.content.pm.PackageManager
-import android.net.Uri
-import android.provider.MediaStore
+import android.os.Bundle
 import android.view.View
-import androidx.core.app.ActivityCompat
-import androidx.core.net.toUri
-import androidx.fragment.app.Fragment
+import android.widget.Toast
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
 import com.depromeet.housekeeper.base.BaseFragment
 import com.example.imagecup.R
-import com.example.imagecup.databinding.FragmentAlbumBinding
 import com.example.imagecup.databinding.FragmentAlbumLabelBinding
-import com.example.imagecup.ui.adapter.GalleryAdapter
+import com.example.imagecup.model.Photo
+import com.example.imagecup.ui.adapter.AlbumLabelAdapter
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import timber.log.Timber
+import java.io.File
 
-class AlbumLabelFragment : BaseFragment<FragmentAlbumLabelBinding>(R.layout.fragment_album_label){
-    private lateinit var myAdapter : GalleryAdapter
+@AndroidEntryPoint
+class AlbumLabelFragment : BaseFragment<FragmentAlbumLabelBinding>(R.layout.fragment_album_label) {
+    private lateinit var myAdapter: AlbumLabelAdapter
+    private val viewModel: MainViewModel by viewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.getString("label")?.let { viewModel.getAlbumPhotos(it) }
+
+    }
+
     override fun createView(binding: FragmentAlbumLabelBinding) {
-
+        setListener()
+        setAdapter()
+        bindingVM()
     }
 
     override fun viewCreated() {
-        getGalleryPermission()
+
     }
 
-    private fun getGalleryPermission() {
-        val isPermission = ActivityCompat.checkSelfPermission(requireContext(),android.Manifest.permission.READ_EXTERNAL_STORAGE)
-        if(isPermission != PackageManager.PERMISSION_GRANTED){
-            // 권한 허용 안됨
-            if(ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), android.Manifest.permission.READ_EXTERNAL_STORAGE)){
-                val permissionAlert = AlertDialog.Builder(requireContext())
-                permissionAlert.setMessage("이미지를 등록하기위해선 저장소 읽기 권한이 필요합니다. 허용하시겠습니까?")
-                permissionAlert.setPositiveButton("yes") { _: DialogInterface?, _: Int ->
-                    activity?.requestPermissions(
-                        arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
-                        0x01
-                    )
-                }
-                permissionAlert.setNegativeButton("no") { _: DialogInterface?, _: Int -> activity?.finish() }
-                permissionAlert.show()
+    private fun setListener() {
+        binding.ivAlbumUploadIcon.setOnClickListener {
+            if (viewModel.uploadPhoto.value != null) {
+                imageToFile(viewModel.uploadPhoto.value!!)
+                Toast.makeText(requireContext(), "업로드가 완료되었습니다.", Toast.LENGTH_LONG).show()
             } else {
-                ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
-                    0x01)
+                Toast.makeText(requireContext(), "사진을 선택해주세요.", Toast.LENGTH_LONG).show()
             }
-        } else {
-            // 권한이 이미 허용됨
-            getAllPhotos()
-            Timber.d("퍼미션 허용됨")
+
         }
     }
-    private fun getAllPhotos(){
-        val cursor = requireContext().contentResolver.query(
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-            null,
-            null,
-            null,
-            MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC")
-        val uriArr = ArrayList<Uri>()
-        if(cursor!=null){
-            while(cursor.moveToNext()){
-                // 사진 경로 Uri 가져오기
-                val uri = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA))
-                uriArr.add(uri.toUri())
-            }
-            cursor.close()
-        }
-        myAdapter = GalleryAdapter(uriArr)
-        Timber.d("uriArr : $uriArr")
+
+    private fun setAdapter() {
+        val gridLayoutManager = GridLayoutManager(requireContext(), 3)
+        binding.rvGallery.layoutManager = gridLayoutManager
+        myAdapter = AlbumLabelAdapter(emptyList())
         binding.rvGallery.adapter = myAdapter
-        myAdapter.setItemClickListener(object : GalleryAdapter.OnItemClickListener{
-            override fun onClick(v: View, photo_uri: Uri, position: Int) {
-                v.isSelected = !v.isSelected
-            }
-        })
     }
+
+    private fun bindingVM() {
+        lifecycleScope.launchWhenCreated {
+            viewModel.albumPhotos.collectLatest {
+                Timber.d("albumphotos : $it")
+                if (it.isNotEmpty()) {
+                    myAdapter = AlbumLabelAdapter(it)
+                    binding.rvGallery.adapter = myAdapter
+                    myAdapter.setItemClickListener(object : AlbumLabelAdapter.OnItemClickListener {
+                        override fun onClick(v: View, photo: Photo, position: Int) {
+                            if (viewModel.uploadPhoto.value == null || viewModel.uploadPhoto.value == photo) {
+                                if (v.isSelected) {
+                                    viewModel.setUploadPhoto(null)
+                                    v.isSelected = !v.isSelected
+                                } else {
+                                    viewModel.setUploadPhoto(photo)
+                                    v.isSelected = !v.isSelected
+                                }
+                            }
+                        }
+                    })
+                }
+            }
+        }
+
+    }
+
+    private fun imageToFile(photo: Photo) {
+        val file = File(photo.title)
+        val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+        val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
+        Timber.d("file : $body")
+    }
+
 
 }
