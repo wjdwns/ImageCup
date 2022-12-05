@@ -3,6 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/SY/StudioProjects/ImageCup/app/src/main/res/layout/fragment_album.xml" value="0.1" />
+        <entry key="..\:/Users/SY/StudioProjects/ImageCup/app/src/main/res/layout/fragment_album_label.xml" value="0.1" />
+        <entry key="..\:/Users/SY/StudioProjects/ImageCup/app/src/main/res/layout/fragment_ranking.xml" value="0.1" />
+        <entry key="..\:/Users/SY/StudioProjects/ImageCup/app/src/main/res/layout/fragment_rating.xml" value="0.22" />
+        <entry key="..\:/Users/SY/StudioProjects/ImageCup/app/src/main/res/layout/item_ranking.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_album_label.xml" value="0.1" />
       </map>
     </option>

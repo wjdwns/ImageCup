@@ -1,5 +1,6 @@
 package com.example.imagecup.ui
 
+import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -34,12 +35,18 @@ class ResultFragment : BaseFragment<FragmentResultBinding>(R.layout.fragment_res
     private fun bindingVm(){
         lifecycleScope.launchWhenCreated {
             viewModel.labels.collectLatest {
+                Timber.d("$it")
                 myAdapter = ResultAdapter(labels)
                 binding.rvRanking.adapter = myAdapter
                 myAdapter.notifyDataSetChanged()
                 myAdapter.setItemClickListener(object :ResultAdapter.OnItemClickListener{
                     override fun onClick(v: View, label: String, position: Int) {
-                        (activity as MainActivity).replaceFragment(ResultLabelFragment())
+                        Timber.d("Click $label")
+                        var fragment = ResultLabelFragment()
+                        var bundle = Bundle()
+                        bundle.putString("label", label)
+                        fragment.arguments = bundle
+                        (activity as MainActivity).replaceFragment(fragment)
                     }
                 })
             }
