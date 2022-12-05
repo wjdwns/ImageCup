@@ -52,10 +52,5 @@ class MainActivity : AppCompatActivity() {
         fragmentTransaction.replace(R.id.main_FL, fragment)
         fragmentTransaction.commit()
     }
-
-    fun fragmentToFragment(int :Int){
-        when(int){
-            1 -> replaceFragment(GalleryFragment())
-        }
-    }
-        }
+    
+}
