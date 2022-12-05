@@ -42,6 +42,10 @@ class MainActivity : AppCompatActivity() {
                     replaceFragment(RankingFragment())
                     return@setOnItemSelectedListener true
                 }
+                R.id.exhibition -> {
+                    replaceFragment(ResultFragment())
+                    return@setOnItemSelectedListener true
+                }
                 else -> return@setOnItemSelectedListener false
             }
         }
