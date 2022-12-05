@@ -98,6 +98,8 @@ dependencies {
     implementation Dependencies.roomGuava
     implementation Dependencies.roomRuntime
     kapt Dependencies.roomCompiler
+
+    implementation Dependencies.preferencesDatastore
 }
 kapt{
     correctErrorTypes true

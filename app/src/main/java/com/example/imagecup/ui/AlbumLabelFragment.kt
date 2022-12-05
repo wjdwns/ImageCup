@@ -23,11 +23,12 @@ import java.io.File
 class AlbumLabelFragment : BaseFragment<FragmentAlbumLabelBinding>(R.layout.fragment_album_label) {
     private lateinit var myAdapter: AlbumLabelAdapter
     private val viewModel: MainViewModel by viewModels()
+    private lateinit var label : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.getString("label")?.let { viewModel.getAlbumPhotos(it) }
-
+        label = arguments?.getString("label").toString()
     }
 
     override fun createView(binding: FragmentAlbumLabelBinding) {
@@ -37,7 +38,7 @@ class AlbumLabelFragment : BaseFragment<FragmentAlbumLabelBinding>(R.layout.frag
     }
 
     override fun viewCreated() {
-
+        binding.tvAlbumLabel.text = label
     }
 
     private fun setListener() {

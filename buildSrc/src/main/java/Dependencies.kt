@@ -76,5 +76,7 @@ object Dependencies {
     const val roomKtx = "androidx.room:room-ktx:$ROOM"
     const val roomGuava = "androidx.room:room-guava:$ROOM"
 
+    private const val DATASTORE = "1.0.0"
+    const val preferencesDatastore = "androidx.datastore:datastore-preferences:$DATASTORE"
 
 }
