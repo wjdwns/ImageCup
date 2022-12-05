@@ -7,8 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.imagecup.databinding.ItemAlbumBinding
 import com.example.imagecup.model.AlbumResponse
+import com.example.imagecup.model.Photo
 
-class AlbumAdapter(private val albumResponse: List<AlbumResponse>) :
+class AlbumAdapter(private val photos: List<Photo>) :
     RecyclerView.Adapter<AlbumAdapter.ItemViewHolder>() {
     interface OnItemClickListener {
         fun onClick(v: View, label: String, position: Int)
@@ -30,18 +31,18 @@ class AlbumAdapter(private val albumResponse: List<AlbumResponse>) :
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        holder.bind(albumResponse[position])
+        holder.bind(photos[position])
     }
 
-    override fun getItemCount(): Int = albumResponse.size
+    override fun getItemCount(): Int = photos.size
 
     inner class ItemViewHolder(private val binding: ItemAlbumBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(albumResponse: AlbumResponse) {
+        fun bind(photo: Photo) {
             Glide.with(binding.root)
-                .load(albumResponse.photos.first())
+                .load(photo.title)
                 .into(binding.ivAlbumImage)
-            binding.tvAlbumLabel.text = albumResponse.label
+            binding.tvAlbumLabel.text = photo.label
         }
     }
 }
