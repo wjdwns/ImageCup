@@ -62,7 +62,6 @@ class AlbumFragment : BaseFragment<FragmentAlbumBinding>(R.layout.fragment_album
         binding.rvAlbum.adapter = myAdapter
         myAdapter.setItemClickListener(object :AlbumAdapter.OnItemClickListener{
             override fun onClick(v: View, label: String, position: Int) {
-                //mainActivity?.fragmentToFragment(1)
             }
         })
 

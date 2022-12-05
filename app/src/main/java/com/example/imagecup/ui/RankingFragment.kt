@@ -39,7 +39,7 @@ class RankingFragment : BaseFragment<FragmentRankingBinding>(R.layout.fragment_r
                 myAdapter.notifyDataSetChanged()
                 myAdapter.setItemClickListener(object :RankAdapter.OnItemClickListener{
                     override fun onClick(v: View, label: String, position: Int) {
-
+                        (activity as MainActivity).replaceFragment(RatingFragment())
                     }
                 })
             }
