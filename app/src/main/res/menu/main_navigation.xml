@@ -15,4 +15,9 @@
         android:icon="@drawable/ic_ranking"
         android:enabled="true"
         android:title="@string/ranking"/>
+    <item
+        android:id="@+id/exhibition"
+        android:icon="@drawable/ic_result"
+        android:enabled="true"
+        android:title="전시"/>
 </menu>
