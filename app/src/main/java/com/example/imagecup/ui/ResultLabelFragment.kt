@@ -18,5 +18,6 @@ class ResultLabelFragment : BaseFragment<FragmentResultLabelBinding>(R.layout.fr
     override fun createView(binding: FragmentResultLabelBinding) {
     }
     override fun viewCreated() {
+        binding.tvLabel.text = arguments?.getString("label").toString()
     }
 }
