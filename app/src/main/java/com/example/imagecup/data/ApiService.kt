@@ -16,7 +16,7 @@ interface ApiService {
     suspend fun uploadFile(
         @Part file: MultipartBody.Part,
         uid: String,
-        label: String
+        label: String,
     )
 
     @GET("evaluation/photos")
