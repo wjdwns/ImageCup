@@ -14,6 +14,7 @@ import android.provider.MediaStore
 import android.util.Base64
 import android.util.Base64.NO_WRAP
 import android.view.View
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
@@ -157,6 +158,7 @@ class GalleryFragment : BaseFragment<FragmentGalleryBinding>(R.layout.fragment_g
             imageFiles = imageFiles.plus(body)
         }
         viewModel.objectDetect(imageFiles)
+        Toast.makeText(requireContext(),"사진을 판별 중입니다. 잠시만 기다려주세요.",Toast.LENGTH_LONG)
         myAdapter.dataChanged()
         Timber.d("file : $imageFiles")
     }

@@ -1,12 +1,12 @@
 package com.example.imagecup.ui
 
 import android.net.Uri
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.imagecup.data.repository.Repository
-import com.example.imagecup.model.ObjectDetectRequest
-import com.example.imagecup.model.ObjectDetectResponse
 import com.example.imagecup.model.Photo
+import com.example.imagecup.utils.PrefsManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -93,6 +93,14 @@ class MainViewModel @Inject constructor(
 
     fun setUploadPhoto(photo: Photo?){
         _uploadPhoto.value = photo
+    }
+
+    fun uploadPhoto(photo:MultipartBody.Part, label : String){
+        viewModelScope.launch {
+            repository.uploadFile(photo,PrefsManager.uid,label).collectLatest {
+
+            }
+        }
     }
 
 }
