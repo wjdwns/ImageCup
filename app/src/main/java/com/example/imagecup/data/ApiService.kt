@@ -2,6 +2,7 @@ package com.example.imagecup.data
 
 import com.example.imagecup.model.*
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.http.*
 
 interface ApiService {
@@ -15,9 +16,9 @@ interface ApiService {
     @POST("/evaluation/upload")
     suspend fun uploadFile(
         @Part file: MultipartBody.Part,
-        uid: String,
-        label: String
-    )
+        @Part("uid") uid: RequestBody,
+        @Part("label") label: RequestBody
+    ):Message
 
     @GET("evaluation/photos")
     suspend fun getPhotos(
@@ -27,7 +28,7 @@ interface ApiService {
     @POST("evaluation/score")
     suspend fun evaluationPhoto(
         evaluationPhoto: EvaluationPhotoRequest
-    )
+    ):Message
 
     @GET("ranking")
     suspend fun getRankingPhotos(

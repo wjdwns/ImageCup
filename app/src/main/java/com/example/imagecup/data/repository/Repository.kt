@@ -1,11 +1,11 @@
 package com.example.imagecup.data.repository
 
-import com.example.imagecup.data.dataSource.RemoteDataSource
 import com.example.imagecup.data.dataSource.RemoteDataSourceImpl
 import com.example.imagecup.data.room.PhotoDao
 import com.example.imagecup.model.*
 import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import javax.inject.Inject
 
 class Repository @Inject constructor(
@@ -22,13 +22,17 @@ class Repository @Inject constructor(
 
     suspend fun getAllPhotos(label: String): List<Photo> = photoDao.getPhotos(label)
 
-    suspend fun uploadFile(file: MultipartBody.Part, uid: String, label: String): Flow<Unit> =
+    suspend fun uploadFile(
+        file: MultipartBody.Part,
+        uid: RequestBody,
+        label: RequestBody
+    ): Flow<Message> =
         remoteDataSource.uploadFile(file, uid, label)
 
     suspend fun getPhotos(label: String, uid: String, page: Int): Flow<GetPhotosResponse> =
         remoteDataSource.getPhotos(GetPhotosRequest(label, uid, page))
 
-    suspend fun evaluationPhoto(pid: String, uid: String, scoreValue: Int): Flow<Unit> =
+    suspend fun evaluationPhoto(pid: String, uid: String, scoreValue: Int): Flow<Message> =
         remoteDataSource.evaluationPhoto(EvaluationPhotoRequest(pid, uid, scoreValue))
 
     suspend fun getRankingPhotos(label: String): Flow<GetRankingPhotosResponse> =

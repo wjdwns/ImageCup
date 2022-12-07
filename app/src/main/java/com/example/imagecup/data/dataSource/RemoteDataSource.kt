@@ -3,6 +3,7 @@ package com.example.imagecup.data.dataSource
 import com.example.imagecup.model.*
 import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 
 interface RemoteDataSource {
     suspend fun objectDetect(
@@ -11,9 +12,9 @@ interface RemoteDataSource {
 
     suspend fun uploadFile(
         file: MultipartBody.Part,
-        uid: String,
-        label: String
-    ) : Flow<Unit>
+        uid: RequestBody,
+        label: RequestBody
+    ) : Flow<Message>
 
     suspend fun getPhotos(
         getPhotos:GetPhotosRequest
@@ -21,7 +22,7 @@ interface RemoteDataSource {
 
     suspend fun evaluationPhoto(
         evaluationPhoto: EvaluationPhotoRequest
-    ) : Flow<Unit>
+    ) : Flow<Message>
 
     suspend fun getRankingPhotos(
         label : String

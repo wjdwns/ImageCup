@@ -5,14 +5,8 @@ import android.content.ContentResolver
 import android.content.Context
 import android.content.DialogInterface
 import android.content.pm.PackageManager
-import android.database.Cursor
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.ImageDecoder
 import android.net.Uri
 import android.provider.MediaStore
-import android.util.Base64
-import android.util.Base64.NO_WRAP
 import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -23,21 +17,14 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.depromeet.housekeeper.base.BaseFragment
 import com.example.imagecup.R
 import com.example.imagecup.databinding.FragmentGalleryBinding
-import com.example.imagecup.model.ObjectDetectRequest
-import com.example.imagecup.model.Photo
 import com.example.imagecup.ui.adapter.GalleryAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.internal.notify
 import timber.log.Timber
-import java.io.ByteArrayOutputStream
 import java.io.File
-import java.io.InputStream
 
 @AndroidEntryPoint
 class GalleryFragment : BaseFragment<FragmentGalleryBinding>(R.layout.fragment_gallery) {

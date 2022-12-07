@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import javax.inject.Inject
 
 class RemoteDataSourceImpl @Inject constructor(
@@ -22,9 +23,9 @@ class RemoteDataSourceImpl @Inject constructor(
 
     override suspend fun uploadFile(
         file: MultipartBody.Part,
-        uid: String,
-        label: String
-    ): Flow<Unit> = flow {
+        uid: RequestBody,
+        label: RequestBody
+    ): Flow<Message> = flow {
         emit(apiService.uploadFile(file, uid, label))
     }.flowOn(ioDispatcher)
 
@@ -36,7 +37,7 @@ class RemoteDataSourceImpl @Inject constructor(
 
     override suspend fun evaluationPhoto(
         evaluationPhoto: EvaluationPhotoRequest
-    ): Flow<Unit> = flow {
+    ): Flow<Message> = flow {
         emit(apiService.evaluationPhoto(evaluationPhoto))
     }.flowOn(ioDispatcher)
 
