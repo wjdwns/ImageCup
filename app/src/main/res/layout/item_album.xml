@@ -21,7 +21,6 @@
             app:layout_constraintBottom_toTopOf="@id/tv_album_label"
             />
         <TextView
-            android:onClick="onClick"
             android:id="@+id/tv_album_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

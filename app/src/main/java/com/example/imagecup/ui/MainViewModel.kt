@@ -4,17 +4,21 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.imagecup.data.repository.Repository
-import com.example.imagecup.model.ObjectDetectRequest
-import com.example.imagecup.model.ObjectDetectResponse
 import com.example.imagecup.model.Photo
+import com.example.imagecup.utils.PrefsManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import timber.log.Timber
 import javax.inject.Inject
+
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -93,6 +97,19 @@ class MainViewModel @Inject constructor(
 
     fun setUploadPhoto(photo: Photo?){
         _uploadPhoto.value = photo
+    }
+
+    fun uploadPhoto(photo:MultipartBody.Part, label : String){
+        val requestBodyUid :RequestBody = PrefsManager.uid.toRequestBody("text/plain".toMediaTypeOrNull())
+        val requestBodyLabel: RequestBody = label.toRequestBody("text/plain".toMediaTypeOrNull())
+        viewModelScope.launch {
+            repository.uploadFile(photo,requestBodyUid,requestBodyLabel).collect{
+                runCatching {
+                    Timber.d("파일 업로드 완료 $it")
+                }.onFailure {
+                    Timber.e("$it")                }
+            }
+        }
     }
 
 }

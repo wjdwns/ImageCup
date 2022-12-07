@@ -34,12 +34,18 @@ class RankingFragment : BaseFragment<FragmentRankingBinding>(R.layout.fragment_r
     private fun bindingVm(){
         lifecycleScope.launchWhenCreated {
             viewModel.labels.collectLatest {
+                Timber.d("$it")
                 myAdapter = RankAdapter(labels)
                 binding.rvRanking.adapter = myAdapter
                 myAdapter.notifyDataSetChanged()
                 myAdapter.setItemClickListener(object :RankAdapter.OnItemClickListener{
                     override fun onClick(v: View, label: String, position: Int) {
-                        (activity as MainActivity).replaceFragment(RatingFragment())
+                        Timber.d("Click $label")
+                        var fragment = RatingFragment()
+                        var bundle = Bundle()
+                        bundle.putString("label", label)
+                        fragment.arguments = bundle
+                        (activity as MainActivity).replaceFragment(fragment)
                     }
                 })
             }

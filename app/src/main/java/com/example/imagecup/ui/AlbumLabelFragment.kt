@@ -44,12 +44,12 @@ class AlbumLabelFragment : BaseFragment<FragmentAlbumLabelBinding>(R.layout.frag
     private fun setListener() {
         binding.ivAlbumUploadIcon.setOnClickListener {
             if (viewModel.uploadPhoto.value != null) {
-                imageToFile(viewModel.uploadPhoto.value!!)
+                val imageFile = imageToFile(viewModel.uploadPhoto.value!!)
+                viewModel.uploadPhoto(imageFile,label)
                 Toast.makeText(requireContext(), "업로드가 완료되었습니다.", Toast.LENGTH_LONG).show()
             } else {
                 Toast.makeText(requireContext(), "사진을 선택해주세요.", Toast.LENGTH_LONG).show()
             }
-
         }
     }
 
@@ -86,11 +86,12 @@ class AlbumLabelFragment : BaseFragment<FragmentAlbumLabelBinding>(R.layout.frag
 
     }
 
-    private fun imageToFile(photo: Photo) {
+    private fun imageToFile(photo: Photo):MultipartBody.Part {
         val file = File(photo.title)
         val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
         val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
         Timber.d("file : $body")
+        return body
     }
 
 
