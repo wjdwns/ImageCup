@@ -24,6 +24,7 @@ import java.io.File
 class RatingFragment : BaseFragment<FragmentRatingBinding>(R.layout.fragment_rating){
     private lateinit var myAdapter: RatingAdapter
     private val viewModel: MainViewModel by viewModels()
+    private var ratescore: Int = 0
 
     override fun createView(binding: FragmentRatingBinding) {
         setListener()
@@ -37,52 +38,57 @@ class RatingFragment : BaseFragment<FragmentRatingBinding>(R.layout.fragment_rat
     }
 
     private fun setListener() {
-        binding.ivStar6.setOnClickListener {
-            binding.ivStar6.setImageResource(R.drawable.ic_fullstar)
-            binding.ivStar7.setImageResource(R.drawable.ic_emptystar)
-            binding.ivStar8.setImageResource(R.drawable.ic_emptystar)
-            binding.ivStar9.setImageResource(R.drawable.ic_emptystar)
-            binding.ivStar10.setImageResource(R.drawable.ic_emptystar)
+        binding.ivRate1.setOnClickListener {
+            binding.ivRate1.setImageResource(R.drawable.ic_fullstar)
+            binding.ivRate2.setImageResource(R.drawable.ic_emptystar)
+            binding.ivRate3.setImageResource(R.drawable.ic_emptystar)
+            binding.ivRate4.setImageResource(R.drawable.ic_emptystar)
+            binding.ivRate5.setImageResource(R.drawable.ic_emptystar)
             Toast.makeText(requireContext(), "1점", Toast.LENGTH_LONG).show()
+            ratescore = 1
             }
-        binding.ivStar7.setOnClickListener {
-            binding.ivStar6.setImageResource(R.drawable.ic_fullstar)
-            binding.ivStar7.setImageResource(R.drawable.ic_fullstar)
-            binding.ivStar8.setImageResource(R.drawable.ic_emptystar)
-            binding.ivStar9.setImageResource(R.drawable.ic_emptystar)
-            binding.ivStar10.setImageResource(R.drawable.ic_emptystar)
+        binding.ivRate2.setOnClickListener {
+            binding.ivRate1.setImageResource(R.drawable.ic_fullstar)
+            binding.ivRate2.setImageResource(R.drawable.ic_fullstar)
+            binding.ivRate3.setImageResource(R.drawable.ic_emptystar)
+            binding.ivRate4.setImageResource(R.drawable.ic_emptystar)
+            binding.ivRate5.setImageResource(R.drawable.ic_emptystar)
             Toast.makeText(requireContext(), "2점", Toast.LENGTH_SHORT).show()
+            ratescore = 2
         }
-        binding.ivStar8.setOnClickListener {
-            binding.ivStar6.setImageResource(R.drawable.ic_fullstar)
-            binding.ivStar7.setImageResource(R.drawable.ic_fullstar)
-            binding.ivStar8.setImageResource(R.drawable.ic_fullstar)
-            binding.ivStar9.setImageResource(R.drawable.ic_emptystar)
-            binding.ivStar10.setImageResource(R.drawable.ic_emptystar)
+        binding.ivRate3.setOnClickListener {
+            binding.ivRate1.setImageResource(R.drawable.ic_fullstar)
+            binding.ivRate2.setImageResource(R.drawable.ic_fullstar)
+            binding.ivRate3.setImageResource(R.drawable.ic_fullstar)
+            binding.ivRate4.setImageResource(R.drawable.ic_emptystar)
+            binding.ivRate5.setImageResource(R.drawable.ic_emptystar)
             Toast.makeText(requireContext(), "3점", Toast.LENGTH_SHORT).show()
+            ratescore = 3
         }
-        binding.ivStar9.setOnClickListener {
-            binding.ivStar6.setImageResource(R.drawable.ic_fullstar)
-            binding.ivStar7.setImageResource(R.drawable.ic_fullstar)
-            binding.ivStar8.setImageResource(R.drawable.ic_fullstar)
-            binding.ivStar9.setImageResource(R.drawable.ic_fullstar)
-            binding.ivStar10.setImageResource(R.drawable.ic_emptystar)
+        binding.ivRate4.setOnClickListener {
+            binding.ivRate1.setImageResource(R.drawable.ic_fullstar)
+            binding.ivRate2.setImageResource(R.drawable.ic_fullstar)
+            binding.ivRate3.setImageResource(R.drawable.ic_fullstar)
+            binding.ivRate4.setImageResource(R.drawable.ic_fullstar)
+            binding.ivRate5.setImageResource(R.drawable.ic_emptystar)
             Toast.makeText(requireContext(), "4점", Toast.LENGTH_SHORT).show()
+            ratescore = 4
         }
-        binding.ivStar10.setOnClickListener {
-            binding.ivStar6.setImageResource(R.drawable.ic_fullstar)
-            binding.ivStar7.setImageResource(R.drawable.ic_fullstar)
-            binding.ivStar8.setImageResource(R.drawable.ic_fullstar)
-            binding.ivStar9.setImageResource(R.drawable.ic_fullstar)
-            binding.ivStar10.setImageResource(R.drawable.ic_fullstar)
+        binding.ivRate5.setOnClickListener {
+            binding.ivRate1.setImageResource(R.drawable.ic_fullstar)
+            binding.ivRate2.setImageResource(R.drawable.ic_fullstar)
+            binding.ivRate3.setImageResource(R.drawable.ic_fullstar)
+            binding.ivRate4.setImageResource(R.drawable.ic_fullstar)
+            binding.ivRate5.setImageResource(R.drawable.ic_fullstar)
             Toast.makeText(requireContext(), "5점", Toast.LENGTH_SHORT).show()
+            ratescore = 5
         }
         binding.tvRate.setOnClickListener {
-            binding.ivStar6.setImageResource(R.drawable.ic_emptystar)
-            binding.ivStar7.setImageResource(R.drawable.ic_emptystar)
-            binding.ivStar8.setImageResource(R.drawable.ic_emptystar)
-            binding.ivStar9.setImageResource(R.drawable.ic_emptystar)
-            binding.ivStar10.setImageResource(R.drawable.ic_emptystar)
+            binding.ivRate1.setImageResource(R.drawable.ic_emptystar)
+            binding.ivRate2.setImageResource(R.drawable.ic_emptystar)
+            binding.ivRate3.setImageResource(R.drawable.ic_emptystar)
+            binding.ivRate4.setImageResource(R.drawable.ic_emptystar)
+            binding.ivRate5.setImageResource(R.drawable.ic_emptystar)
             Toast.makeText(requireContext(), "평가완료", Toast.LENGTH_SHORT).show()
 
         }
