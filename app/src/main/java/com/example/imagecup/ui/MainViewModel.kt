@@ -4,9 +4,9 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.imagecup.data.repository.Repository
+import com.example.imagecup.model.GetPhotosResponse
 import com.example.imagecup.model.Photo
 import com.example.imagecup.utils.PrefsManager
-import com.example.imagecup.utils.RetrofitSplit
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -52,6 +52,13 @@ class MainViewModel @Inject constructor(
     val pageNum: StateFlow<Int>
         get() = _pageNum
 
+    private val _pageRandomNum: MutableStateFlow<List<Int>> = MutableStateFlow(emptyList())
+    val pageRandomNum: StateFlow<List<Int>>
+        get() = _pageRandomNum
+
+    private val _photoResponse: MutableStateFlow<GetPhotosResponse?> = MutableStateFlow(null)
+    val photoResponse: StateFlow<GetPhotosResponse?>
+        get() = _photoResponse
 
     fun getAllLabels() {
         viewModelScope.launch {
@@ -73,7 +80,7 @@ class MainViewModel @Inject constructor(
     fun objectDetect(imageList: List<MultipartBody.Part>) {
         _loading.value = true
         viewModelScope.launch {
-            repository.objectDetect(RetrofitSplit.Base_URL2, imageList).collectLatest {
+            repository.objectDetect("http://54.180.55.20:8080/ObjectDetect", imageList).collectLatest {
                 runCatching {
                     for (i: Int in 0 until _photoUri.value.size) {
                         _photos.value =
@@ -124,6 +131,7 @@ class MainViewModel @Inject constructor(
             repository.getPhotos(label, PrefsManager.uid, -1).collectLatest {
                 runCatching {
                     _pageNum.value = it.photoId
+                    setPageRandomNum()
                     Timber.d("pageNum : ${_pageNum.value}")
                 }.onFailure {
                     Timber.e("$it")
@@ -132,4 +140,20 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    private fun setPageRandomNum() {
+        val set = mutableSetOf<Int>()
+        while (set.size < _pageNum.value) {
+            set.add((0.._pageNum.value).random())
+        }
+        _pageRandomNum.value = set.toList()
+    }
+
+    fun getPhoto(label: String, pageNum: Int) {
+        viewModelScope.launch {
+            repository.getPhotos(label, PrefsManager.uid, _pageRandomNum.value[pageNum])
+                .collectLatest {
+                    _photoResponse.value = it
+                }
+        }
+    }
 }

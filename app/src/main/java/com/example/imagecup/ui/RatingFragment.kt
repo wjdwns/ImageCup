@@ -1,40 +1,50 @@
 package com.example.imagecup.ui
 
-import android.os.Bundle
-import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
-import androidx.databinding.DataBindingUtil.setContentView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.GridLayoutManager
+import com.bumptech.glide.Glide
 import com.depromeet.housekeeper.base.BaseFragment
 import com.example.imagecup.R
 import com.example.imagecup.databinding.FragmentRatingBinding
-import com.example.imagecup.model.Photo
-import com.example.imagecup.ui.adapter.RatingAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
-import timber.log.Timber
-import java.io.File
 
 @AndroidEntryPoint
 class RatingFragment : BaseFragment<FragmentRatingBinding>(R.layout.fragment_rating){
-    private lateinit var myAdapter: RatingAdapter
     private val viewModel: MainViewModel by viewModels()
     private var ratescore: Int = 0
+    private var pageNum : Int = 0
     private lateinit var label :String
 
     override fun createView(binding: FragmentRatingBinding) {
         setListener()
         initView()
+        bindingVm()
+    }
+    private fun bindingVm(){
+
+        lifecycleScope.launchWhenCreated {
+            viewModel.photoResponse.collectLatest {
+                if (it != null) {
+                    setImageView(it.path)
+                }
+            }
+        }
     }
 
     private fun initView(){
         label = arguments?.getString("label").toString()
         binding.tvLabel.text = label
+        lifecycleScope.launchWhenCreated {
+            viewModel.pageRandomNum.collectLatest {
+                if(it.isNotEmpty()){
+                    viewModel.getPhoto(label,it[0])
+                    pageNum++
+                }
+            }
+        }
     }
 
     override fun viewCreated() {
@@ -43,6 +53,7 @@ class RatingFragment : BaseFragment<FragmentRatingBinding>(R.layout.fragment_rat
     }
 
     private fun setListener() {
+        binding.ivImage.scaleType = ImageView.ScaleType.CENTER_CROP
         binding.ivRate1.setOnClickListener {
             binding.ivRate1.setImageResource(R.drawable.ic_fullstar)
             binding.ivRate2.setImageResource(R.drawable.ic_emptystar)
@@ -98,4 +109,10 @@ class RatingFragment : BaseFragment<FragmentRatingBinding>(R.layout.fragment_rat
 
         }
         }
+    private fun setImageView(uri : String){
+        Glide.with(binding.root)
+            .load(uri)
+            .into(binding.ivImage)
+    }
+
 }
