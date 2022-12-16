@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import retrofit2.http.Query
 import javax.inject.Inject
 
 class RemoteDataSourceImpl @Inject constructor(
@@ -16,23 +17,26 @@ class RemoteDataSourceImpl @Inject constructor(
     private val ioDispatcher: CoroutineDispatcher
 ) : RemoteDataSource {
     override suspend fun objectDetect(
+        url : String,
         imageList: List<MultipartBody.Part>
     ): Flow<List<ObjectDetectResponse>> = flow {
-        emit(apiService.objectDetect(imageList))
+        emit(apiService.objectDetect(url,imageList))
     }.flowOn(ioDispatcher)
 
     override suspend fun uploadFile(
         file: MultipartBody.Part,
         uid: RequestBody,
         label: RequestBody
-    ): Flow<Message> = flow {
+    ): Flow<Unit> = flow {
         emit(apiService.uploadFile(file, uid, label))
     }.flowOn(ioDispatcher)
 
     override suspend fun getPhotos(
-        getPhotos:GetPhotosRequest
+        label: String,
+        uid : String,
+        page : Int
     ): Flow<GetPhotosResponse> = flow {
-        emit(apiService.getPhotos(getPhotos))
+        emit(apiService.getPhotos(label, uid, page))
     }
 
     override suspend fun evaluationPhoto(

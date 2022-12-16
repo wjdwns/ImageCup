@@ -15,4 +15,5 @@
     <string name="iv_rankresult">보고 싶은 분야를 선택하세요</string>
     <string name="iv_rating">(%s/5.00)</string>
     <string name="iv_rate">평가하기</string>
+    <string name="tv_not_rate">건너뛰기</string>
 </resources>

@@ -7,6 +7,7 @@ import okhttp3.RequestBody
 
 interface RemoteDataSource {
     suspend fun objectDetect(
+        url : String,
         imageList : List<MultipartBody.Part>
     ): Flow<List<ObjectDetectResponse>>
 
@@ -14,10 +15,12 @@ interface RemoteDataSource {
         file: MultipartBody.Part,
         uid: RequestBody,
         label: RequestBody
-    ) : Flow<Message>
+    ) : Flow<Unit>
 
     suspend fun getPhotos(
-        getPhotos:GetPhotosRequest
+        label: String,
+        uid : String,
+        page : Int
     ): Flow<GetPhotosResponse>
 
     suspend fun evaluationPhoto(

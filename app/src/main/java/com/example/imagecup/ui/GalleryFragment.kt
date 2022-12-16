@@ -1,15 +1,16 @@
 package com.example.imagecup.ui
 
+import android.Manifest
 import android.app.AlertDialog
-import android.content.ContentResolver
-import android.content.Context
 import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.provider.MediaStore
 import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -58,29 +59,57 @@ class GalleryFragment : BaseFragment<FragmentGalleryBinding>(R.layout.fragment_g
     }
 
     private fun getGalleryPermission() {
-        val isPermission = ActivityCompat.checkSelfPermission(requireContext(),android.Manifest.permission.READ_EXTERNAL_STORAGE)
-        if(isPermission != PackageManager.PERMISSION_GRANTED){
-            // 권한 허용 안됨
-            if(ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), android.Manifest.permission.READ_EXTERNAL_STORAGE)){
-                val permissionAlert = AlertDialog.Builder(requireContext())
-                permissionAlert.setMessage("이미지를 등록하기위해선 저장소 읽기 권한이 필요합니다. 허용하시겠습니까?")
-                permissionAlert.setPositiveButton("yes") { _: DialogInterface?, _: Int ->
-                    activity?.requestPermissions(
-                        arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
-                        0x01
-                    )
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            val isPermission = ActivityCompat.checkSelfPermission(requireContext(),android.Manifest.permission.READ_EXTERNAL_STORAGE)
+            if(isPermission != PackageManager.PERMISSION_GRANTED){
+                // 권한 허용 안됨
+                if(ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), android.Manifest.permission.READ_EXTERNAL_STORAGE)){
+                    val permissionAlert = AlertDialog.Builder(requireContext())
+                    permissionAlert.setMessage("이미지를 등록하기위해선 저장소 읽기 권한이 필요합니다. 허용하시겠습니까?")
+                    permissionAlert.setPositiveButton("yes") { _: DialogInterface?, _: Int ->
+                        activity?.requestPermissions(
+                            arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
+                            0x01
+                        )
+                    }
+                    permissionAlert.setNegativeButton("no") { _: DialogInterface?, _: Int -> activity?.finish() }
+                    permissionAlert.show()
+                } else {
+                    ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
+                        0x01)
                 }
-                permissionAlert.setNegativeButton("no") { _: DialogInterface?, _: Int -> activity?.finish() }
-                permissionAlert.show()
             } else {
-                ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
-                    0x01)
+                // 권한이 이미 허용됨
+                getAllPhotos()
+                Timber.d("퍼미션 허용됨")
             }
-        } else {
-            // 권한이 이미 허용됨
-            getAllPhotos()
-            Timber.d("퍼미션 허용됨")
         }
+        else{
+            val isPermission = ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_MEDIA_IMAGES)
+            if(isPermission != PackageManager.PERMISSION_GRANTED){
+                // 권한 허용 안됨
+                if(ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.READ_MEDIA_IMAGES)){
+                    val permissionAlert = AlertDialog.Builder(requireContext())
+                    permissionAlert.setMessage("이미지를 등록하기위해선 저장소 읽기 권한이 필요합니다. 허용하시겠습니까?")
+                    permissionAlert.setPositiveButton("yes") { _: DialogInterface?, _: Int ->
+                        activity?.requestPermissions(
+                            arrayOf(Manifest.permission.READ_MEDIA_IMAGES),
+                            0x01
+                        )
+                    }
+                    permissionAlert.setNegativeButton("no") { _: DialogInterface?, _: Int -> activity?.finish() }
+                    permissionAlert.show()
+                } else {
+                    ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.READ_MEDIA_IMAGES),
+                        0x01)
+                }
+            } else {
+                // 권한이 이미 허용됨
+                getAllPhotos()
+                Timber.d("퍼미션 허용됨")
+            }
+        }
+
     }
     private fun bindingVm(){
         lifecycleScope.launchWhenCreated {

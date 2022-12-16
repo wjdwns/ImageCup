@@ -6,12 +6,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.imagecup.data.repository.Repository
 import com.example.imagecup.model.Photo
 import com.example.imagecup.utils.PrefsManager
+import com.example.imagecup.utils.RetrofitSplit
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -24,33 +24,36 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val repository: Repository
 ) : ViewModel() {
-    private val _photoUri : MutableStateFlow<List<Uri>> = MutableStateFlow(emptyList())
-    val photoUri : StateFlow<List<Uri>>
+    private val _photoUri: MutableStateFlow<List<Uri>> = MutableStateFlow(emptyList())
+    val photoUri: StateFlow<List<Uri>>
         get() = _photoUri
 
-    private val _photos : MutableStateFlow<List<Photo>> = MutableStateFlow(emptyList())
-    val photo : StateFlow<List<Photo>>
+    private val _photos: MutableStateFlow<List<Photo>> = MutableStateFlow(emptyList())
+    val photo: StateFlow<List<Photo>>
         get() = _photos
 
-    private val _loading : MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val loading : StateFlow<Boolean>
+    private val _loading: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val loading: StateFlow<Boolean>
         get() = _loading
 
-    private val _labels : MutableStateFlow<List<Photo>> = MutableStateFlow(emptyList())
-    val labels : StateFlow<List<Photo>>
+    private val _labels: MutableStateFlow<List<Photo>> = MutableStateFlow(emptyList())
+    val labels: StateFlow<List<Photo>>
         get() = _labels
 
-    private val _albumPhotos : MutableStateFlow<List<Photo>> = MutableStateFlow(emptyList())
-    val albumPhotos : StateFlow<List<Photo>>
+    private val _albumPhotos: MutableStateFlow<List<Photo>> = MutableStateFlow(emptyList())
+    val albumPhotos: StateFlow<List<Photo>>
         get() = _albumPhotos
 
-    private val _uploadPhoto : MutableStateFlow<Photo?> = MutableStateFlow(null)
-    val uploadPhoto : StateFlow<Photo?>
+    private val _uploadPhoto: MutableStateFlow<Photo?> = MutableStateFlow(null)
+    val uploadPhoto: StateFlow<Photo?>
         get() = _uploadPhoto
 
+    private val _pageNum: MutableStateFlow<Int> = MutableStateFlow(0)
+    val pageNum: StateFlow<Int>
+        get() = _pageNum
 
 
-    fun getAllLabels(){
+    fun getAllLabels() {
         viewModelScope.launch {
             _labels.value = repository.getAllLabels()
         }
@@ -66,13 +69,15 @@ class MainViewModel @Inject constructor(
             }
         }
     }
-    fun objectDetect(imageList : List<MultipartBody.Part>){
+
+    fun objectDetect(imageList: List<MultipartBody.Part>) {
         _loading.value = true
         viewModelScope.launch {
-            repository.objectDetect(imageList).collectLatest {
+            repository.objectDetect(RetrofitSplit.Base_URL2, imageList).collectLatest {
                 runCatching {
-                    for(i: Int in 0 until _photoUri.value.size){
-                        _photos.value = _photos.value.plus(Photo(_photoUri.value[i].toString(),it[i].label))
+                    for (i: Int in 0 until _photoUri.value.size) {
+                        _photos.value =
+                            _photos.value.plus(Photo(_photoUri.value[i].toString(), it[i].label))
                     }
                     insertPhoto(_photos.value)
                 }.onFailure {
@@ -82,32 +87,47 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun insertPhoto(photoList: List<Photo>){
+    private fun insertPhoto(photoList: List<Photo>) {
         viewModelScope.launch {
             repository.insertPhoto(photoList)
         }
         _loading.value = false
     }
 
-    fun getAlbumPhotos(label : String){
+    fun getAlbumPhotos(label: String) {
         viewModelScope.launch {
             _albumPhotos.value = repository.getAllPhotos(label)
         }
     }
 
-    fun setUploadPhoto(photo: Photo?){
+    fun setUploadPhoto(photo: Photo?) {
         _uploadPhoto.value = photo
     }
 
-    fun uploadPhoto(photo:MultipartBody.Part, label : String){
-        val requestBodyUid :RequestBody = PrefsManager.uid.toRequestBody("text/plain".toMediaTypeOrNull())
+    fun uploadPhoto(photo: MultipartBody.Part, label: String) {
+        val requestBodyUid: RequestBody =
+            PrefsManager.uid.toRequestBody("text/plain".toMediaTypeOrNull())
         val requestBodyLabel: RequestBody = label.toRequestBody("text/plain".toMediaTypeOrNull())
         viewModelScope.launch {
-            repository.uploadFile(photo,requestBodyUid,requestBodyLabel).collect{
+            repository.uploadFile(photo, requestBodyUid, requestBodyLabel).collect {
                 runCatching {
-                    Timber.d("파일 업로드 완료 $it")
+                    Timber.d("파일 업로드 완료")
                 }.onFailure {
-                    Timber.e("$it")                }
+                    Timber.e("$it")
+                }
+            }
+        }
+    }
+
+    fun initGetPhoto(label: String) {
+        viewModelScope.launch {
+            repository.getPhotos(label, PrefsManager.uid, -1).collectLatest {
+                runCatching {
+                    _pageNum.value = it.photoId
+                    Timber.d("pageNum : ${_pageNum.value}")
+                }.onFailure {
+                    Timber.e("$it")
+                }
             }
         }
     }

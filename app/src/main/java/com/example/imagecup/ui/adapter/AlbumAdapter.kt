@@ -49,7 +49,7 @@ class AlbumAdapter(private val photos: List<Photo>) :
             val pos = adapterPosition
             if (pos != RecyclerView.NO_POSITION) {
                 binding.ivAlbumImage.setOnClickListener {
-                    itemClickListener!!.onClick(itemView, photo.label, pos)
+                    itemClickListener.onClick(itemView, photo.label, pos)
                 }
             }
         }

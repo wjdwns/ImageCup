@@ -7,8 +7,9 @@ import retrofit2.http.*
 
 interface ApiService {
     @Multipart
-    @POST("/ObjectDetect")
+    @POST
     suspend fun objectDetect(
+        @Url url : String,
         @Part file : List<MultipartBody.Part>
     ): List<ObjectDetectResponse>
 
@@ -18,16 +19,18 @@ interface ApiService {
         @Part file: MultipartBody.Part,
         @Part("uid") uid: RequestBody,
         @Part("label") label: RequestBody
-    ):Message
+    )
 
     @GET("evaluation/photos")
     suspend fun getPhotos(
-        getPhotos : GetPhotosRequest
+        @Query("label") label: String,
+        @Query("uid") uid : String,
+        @Query("page")page : Int
     ) : GetPhotosResponse
 
     @POST("evaluation/score")
     suspend fun evaluationPhoto(
-        evaluationPhoto: EvaluationPhotoRequest
+        @Body evaluationPhoto: EvaluationPhotoRequest
     ):Message
 
     @GET("ranking")

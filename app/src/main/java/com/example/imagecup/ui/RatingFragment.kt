@@ -25,16 +25,21 @@ class RatingFragment : BaseFragment<FragmentRatingBinding>(R.layout.fragment_rat
     private lateinit var myAdapter: RatingAdapter
     private val viewModel: MainViewModel by viewModels()
     private var ratescore: Int = 0
+    private lateinit var label :String
 
     override fun createView(binding: FragmentRatingBinding) {
         setListener()
+        initView()
     }
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+
+    private fun initView(){
+        label = arguments?.getString("label").toString()
+        binding.tvLabel.text = label
     }
 
     override fun viewCreated() {
-        binding.tvLabel.text = arguments?.getString("label").toString()
+        viewModel.initGetPhoto(label)
+
     }
 
     private fun setListener() {

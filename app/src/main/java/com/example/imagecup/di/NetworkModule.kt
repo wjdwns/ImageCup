@@ -12,19 +12,23 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.Dispatchers
 import okhttp3.*
+import okhttp3.ResponseBody.Companion.toResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.lang.annotation.Documented
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
+import javax.xml.transform.OutputKeys
+
 const val NETWORK_ERROR = 1001
 
 @Module
 @InstallIn(SingletonComponent::class)
 class NetworkModule{
-    private val BASE_URL = "http://54.180.55.20:8080"
+    private val BASE_URL = "http://54.180.55.20:8000"
 
     private val networkInterceptor: Interceptor = Interceptor { chain ->
         val request = chain.request()
@@ -32,6 +36,7 @@ class NetworkModule{
             chain.proceed(
                 request.newBuilder()
                     .build()
+
             )
         } catch (e: Exception) {
             Response.Builder()
@@ -39,7 +44,7 @@ class NetworkModule{
                 .protocol(Protocol.HTTP_1_1)
                 .code(NETWORK_ERROR)
                 .message(e.message ?: "")
-                .body(ResponseBody.create(null, e.message ?: ""))
+                .body((e.message ?: "").toResponseBody(null))
                 .build()
         }
     }

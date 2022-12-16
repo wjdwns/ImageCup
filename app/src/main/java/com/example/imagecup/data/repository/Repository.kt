@@ -13,8 +13,9 @@ class Repository @Inject constructor(
     private val photoDao: PhotoDao
 ) {
     suspend fun objectDetect(
+        url : String,
         imageList: List<MultipartBody.Part>
-    ): Flow<List<ObjectDetectResponse>> = remoteDataSource.objectDetect(imageList)
+    ): Flow<List<ObjectDetectResponse>> = remoteDataSource.objectDetect(url,imageList)
 
     suspend fun insertPhoto(photoList: List<Photo>) = photoDao.insertPhoto(photoList)
 
@@ -26,11 +27,11 @@ class Repository @Inject constructor(
         file: MultipartBody.Part,
         uid: RequestBody,
         label: RequestBody
-    ): Flow<Message> =
+    ): Flow<Unit> =
         remoteDataSource.uploadFile(file, uid, label)
 
     suspend fun getPhotos(label: String, uid: String, page: Int): Flow<GetPhotosResponse> =
-        remoteDataSource.getPhotos(GetPhotosRequest(label, uid, page))
+        remoteDataSource.getPhotos(label, uid, page)
 
     suspend fun evaluationPhoto(pid: String, uid: String, scoreValue: Int): Flow<Message> =
         remoteDataSource.evaluationPhoto(EvaluationPhotoRequest(pid, uid, scoreValue))

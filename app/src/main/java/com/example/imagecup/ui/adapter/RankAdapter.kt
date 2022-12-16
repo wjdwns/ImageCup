@@ -43,7 +43,7 @@ class RankAdapter(private val labels: List<String>) :
             val pos = adapterPosition
             if (pos != RecyclerView.NO_POSITION) {
                 binding.ivJoin.setOnClickListener {
-                    itemClickListener!!.onClick(itemView, label, pos)
+                    itemClickListener.onClick(itemView, label, pos)
                 }
             }
         }
