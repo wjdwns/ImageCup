@@ -80,17 +80,23 @@ class MainViewModel @Inject constructor(
     fun objectDetect(imageList: List<MultipartBody.Part>) {
         _loading.value = true
         viewModelScope.launch {
-            repository.objectDetect("http://54.180.55.20:8080/ObjectDetect", imageList).collectLatest {
-                runCatching {
-                    for (i: Int in 0 until _photoUri.value.size) {
-                        _photos.value =
-                            _photos.value.plus(Photo(_photoUri.value[i].toString(), it[i].label))
+            repository.objectDetect("http://54.180.55.20:8080/ObjectDetect", imageList)
+                .collectLatest {
+                    runCatching {
+                        for (i: Int in 0 until _photoUri.value.size) {
+                            _photos.value =
+                                _photos.value.plus(
+                                    Photo(
+                                        _photoUri.value[i].toString(),
+                                        it[i].label
+                                    )
+                                )
+                        }
+                        insertPhoto(_photos.value)
+                    }.onFailure {
+                        Timber.e("$it")
                     }
-                    insertPhoto(_photos.value)
-                }.onFailure {
-                    Timber.e("$it")
                 }
-            }
         }
     }
 
@@ -143,16 +149,28 @@ class MainViewModel @Inject constructor(
     private fun setPageRandomNum() {
         val set = mutableSetOf<Int>()
         while (set.size < _pageNum.value) {
-            set.add((0.._pageNum.value).random())
+            set.add((0 until _pageNum.value).random())
         }
+        Timber.d("array : $set")
         _pageRandomNum.value = set.toList()
     }
 
     fun getPhoto(label: String, pageNum: Int) {
+        Timber.d("pagelll : $pageNum")
+        val page = pageRandomNum.value[pageNum]
         viewModelScope.launch {
             repository.getPhotos(label, PrefsManager.uid, _pageRandomNum.value[pageNum])
                 .collectLatest {
                     _photoResponse.value = it
+                }
+        }
+    }
+
+    fun ratePhoto(getPhotosResponse: GetPhotosResponse, score: Int) {
+        viewModelScope.launch {
+            repository.evaluationPhoto(getPhotosResponse.photoId, PrefsManager.uid, score)
+                .collectLatest {
+                    Timber.d("평가 완료")
                 }
         }
     }

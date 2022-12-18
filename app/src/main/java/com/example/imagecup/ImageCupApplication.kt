@@ -19,6 +19,7 @@ class ImageCupApplication : Application() {
             PrefsManager.setUid(uid)
             Timber.d("uid : $uid")
         }
+        Timber.d("uid : ${PrefsManager.uid}")
 
     }
 }

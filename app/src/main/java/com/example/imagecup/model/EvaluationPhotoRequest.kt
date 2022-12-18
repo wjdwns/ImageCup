@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class EvaluationPhotoRequest(
-    val pid: String,
+    val pid: Int,
     val uid: String,
     val scoreValue: Int
 ):Parcelable

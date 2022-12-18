@@ -24,7 +24,7 @@ import timber.log.Timber
 class RankingFragment : BaseFragment<FragmentRankingBinding>(R.layout.fragment_ranking) {
     private val viewModel : MainViewModel by viewModels()
     private lateinit var myAdapter: RankAdapter
-    val labels = listOf("강아지","고양이","자동차","사람","이동수단","도로","주방도구","가방","도구","식품","운동기구","가구","전자기기","동물","새","곰","기타")
+    private val labels = listOf("강아지","고양이","자동차","사람","이동수단","도로","주방도구","가방","도구","식품","운동기구","가구","전자기기","동물","새","곰","기타")
     override fun createView(binding: FragmentRankingBinding) {
         initView()
         setAdapter()

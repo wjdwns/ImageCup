@@ -9,7 +9,11 @@
         <entry key="..\:/Users/SY/StudioProjects/ImageCup/app/src/main/res/layout/fragment_rating.xml" value="0.22" />
         <entry key="..\:/Users/SY/StudioProjects/ImageCup/app/src/main/res/layout/item_ranking.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_album_label.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_rating.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/item_album.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/item_ranking.xml" value="0.22195798652397938" />
       </map>
     </option>
   </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="11" project-jdk-type="JavaSDK" />
 </project>

@@ -45,7 +45,6 @@ class AlbumAdapter(private val photos: List<Photo>) :
                 .load(photo.title)
                 .into(binding.ivAlbumImage)
             binding.tvAlbumLabel.text = photo.label
-
             val pos = adapterPosition
             if (pos != RecyclerView.NO_POSITION) {
                 binding.ivAlbumImage.setOnClickListener {

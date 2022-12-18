@@ -24,7 +24,7 @@ interface ApiService {
     @GET("evaluation/photos")
     suspend fun getPhotos(
         @Query("label") label: String,
-        @Query("uid") uid : String,
+        @Query("userId") userId : String,
         @Query("page")page : Int
     ) : GetPhotosResponse
 
