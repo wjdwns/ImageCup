@@ -47,7 +47,7 @@ class RemoteDataSourceImpl @Inject constructor(
 
     override suspend fun getRankingPhotos(
         label: String
-    ): Flow<GetRankingPhotosResponse> = flow {
+    ): Flow<List<GetRankingPhotosResponse>> = flow {
         emit(apiService.getRankingPhotos(label))
     }.flowOn(ioDispatcher)
 

@@ -1,6 +1,6 @@
 package com.example.imagecup.model
 
-class GetRankingPhotosResponse(
+data class GetRankingPhotosResponseItem(
     val avgScore: Double,
     val path: String
 )

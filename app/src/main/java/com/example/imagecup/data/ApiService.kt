@@ -35,8 +35,8 @@ interface ApiService {
 
     @GET("ranking")
     suspend fun getRankingPhotos(
-        label : String
-    ) : GetRankingPhotosResponse
+        @Query("label") label : String
+    ) : List<GetRankingPhotosResponse>
 
 
 }
