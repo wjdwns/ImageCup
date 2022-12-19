@@ -114,9 +114,23 @@ class RatingFragment : BaseFragment<FragmentRatingBinding>(R.layout.fragment_rat
             binding.ivRate4.setImageResource(R.drawable.ic_emptystar)
             binding.ivRate5.setImageResource(R.drawable.ic_emptystar)
             Toast.makeText(requireContext(), "평가완료", Toast.LENGTH_SHORT).show()
-        }
-        binding.tvRate.setOnClickListener {
-            photo?.let { it -> viewModel.ratePhoto(it, rateScore) }
+            if (viewModel.pageRandomNum.value.size > pageNum){
+                photo?.let { it -> viewModel.ratePhoto(it, rateScore) }
+            }
+            if (viewModel.pageRandomNum.value.isNotEmpty()) {
+                pageNum++
+                if (viewModel.pageRandomNum.value.size > pageNum) {
+                    viewModel.getPhoto(label, pageNum)
+                } else {
+                    binding.ivImage.setImageResource(R.drawable.ic_image)
+                    binding.ivStar1.setImageResource(R.drawable.ic_emptystar)
+                    binding.ivStar2.setImageResource(R.drawable.ic_emptystar)
+                    binding.ivStar3.setImageResource(R.drawable.ic_emptystar)
+                    binding.ivStar4.setImageResource(R.drawable.ic_emptystar)
+                    binding.ivStar5.setImageResource(R.drawable.ic_emptystar)
+                    Toast.makeText(requireContext(), "더 이상 사진이 없습니다", Toast.LENGTH_LONG).show()
+                }
+            }
         }
         binding.tvNotRate.setOnClickListener {
             pageNum++
@@ -124,6 +138,12 @@ class RatingFragment : BaseFragment<FragmentRatingBinding>(R.layout.fragment_rat
                 if (viewModel.pageRandomNum.value.size > pageNum) {
                     viewModel.getPhoto(label, pageNum)
                 } else {
+                    binding.ivImage.setImageResource(R.drawable.ic_image)
+                    binding.ivStar1.setImageResource(R.drawable.ic_emptystar)
+                    binding.ivStar2.setImageResource(R.drawable.ic_emptystar)
+                    binding.ivStar3.setImageResource(R.drawable.ic_emptystar)
+                    binding.ivStar4.setImageResource(R.drawable.ic_emptystar)
+                    binding.ivStar5.setImageResource(R.drawable.ic_emptystar)
                     Toast.makeText(requireContext(), "더 이상 사진이 없습니다", Toast.LENGTH_LONG).show()
                 }
             }
