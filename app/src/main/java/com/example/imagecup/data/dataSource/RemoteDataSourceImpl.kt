@@ -41,7 +41,7 @@ class RemoteDataSourceImpl @Inject constructor(
 
     override suspend fun evaluationPhoto(
         evaluationPhoto: EvaluationPhotoRequest
-    ): Flow<Message> = flow {
+    ): Flow<Unit> = flow {
         emit(apiService.evaluationPhoto(evaluationPhoto))
     }.flowOn(ioDispatcher)
 

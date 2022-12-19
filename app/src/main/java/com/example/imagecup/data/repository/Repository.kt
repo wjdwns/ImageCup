@@ -33,7 +33,7 @@ class Repository @Inject constructor(
     suspend fun getPhotos(label: String, uid: String, page: Int): Flow<GetPhotosResponse> =
         remoteDataSource.getPhotos(label, uid, page)
 
-    suspend fun evaluationPhoto(pid: Int, uid: String, scoreValue: Int): Flow<Message> =
+    suspend fun evaluationPhoto(pid: Int, uid: String, scoreValue: Float): Flow<Unit> =
         remoteDataSource.evaluationPhoto(EvaluationPhotoRequest(pid, uid, scoreValue))
 
     suspend fun getRankingPhotos(label: String): Flow<GetRankingPhotosResponse> =

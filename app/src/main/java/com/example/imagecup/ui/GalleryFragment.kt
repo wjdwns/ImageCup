@@ -48,7 +48,9 @@ class GalleryFragment : BaseFragment<FragmentGalleryBinding>(R.layout.fragment_g
 
     private fun setListener() {
         binding.ivSelectComplete.setOnClickListener {
-            imageToFile(viewModel.photoUri.value)
+            if(viewModel.photo.value.isNotEmpty()){
+                imageToFile(viewModel.photoUri.value)
+            }
         }
     }
     private fun setAdapter(){

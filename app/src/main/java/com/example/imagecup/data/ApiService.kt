@@ -31,12 +31,11 @@ interface ApiService {
     @POST("evaluation/score")
     suspend fun evaluationPhoto(
         @Body evaluationPhoto: EvaluationPhotoRequest
-    ):Message
+    )
 
     @GET("ranking")
     suspend fun getRankingPhotos(
         label : String
     ) : GetRankingPhotosResponse
-
 
 }

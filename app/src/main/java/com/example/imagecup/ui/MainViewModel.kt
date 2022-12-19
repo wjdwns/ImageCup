@@ -166,7 +166,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun ratePhoto(getPhotosResponse: GetPhotosResponse, score: Int) {
+    fun ratePhoto(getPhotosResponse: GetPhotosResponse, score: Float) {
         viewModelScope.launch {
             repository.evaluationPhoto(getPhotosResponse.photoId, PrefsManager.uid, score)
                 .collectLatest {

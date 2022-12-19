@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.collectLatest
 @AndroidEntryPoint
 class RatingFragment : BaseFragment<FragmentRatingBinding>(R.layout.fragment_rating) {
     private val viewModel: MainViewModel by viewModels()
-    private var ratescore: Int = 0
+    private var rateScore: Float = 0.0F
     private var pageNum: Int = 0
     private lateinit var label: String
     private var photo: GetPhotosResponse? = null
@@ -69,7 +69,7 @@ class RatingFragment : BaseFragment<FragmentRatingBinding>(R.layout.fragment_rat
             binding.ivRate4.setImageResource(R.drawable.ic_emptystar)
             binding.ivRate5.setImageResource(R.drawable.ic_emptystar)
             Toast.makeText(requireContext(), "1점", Toast.LENGTH_LONG).show()
-            ratescore = 1
+            rateScore = 1.0F
         }
         binding.ivRate2.setOnClickListener {
             binding.ivRate1.setImageResource(R.drawable.ic_fullstar)
@@ -78,7 +78,7 @@ class RatingFragment : BaseFragment<FragmentRatingBinding>(R.layout.fragment_rat
             binding.ivRate4.setImageResource(R.drawable.ic_emptystar)
             binding.ivRate5.setImageResource(R.drawable.ic_emptystar)
             Toast.makeText(requireContext(), "2점", Toast.LENGTH_SHORT).show()
-            ratescore = 2
+            rateScore = 2.0F
         }
         binding.ivRate3.setOnClickListener {
             binding.ivRate1.setImageResource(R.drawable.ic_fullstar)
@@ -87,7 +87,7 @@ class RatingFragment : BaseFragment<FragmentRatingBinding>(R.layout.fragment_rat
             binding.ivRate4.setImageResource(R.drawable.ic_emptystar)
             binding.ivRate5.setImageResource(R.drawable.ic_emptystar)
             Toast.makeText(requireContext(), "3점", Toast.LENGTH_SHORT).show()
-            ratescore = 3
+            rateScore = 3.0F
         }
         binding.ivRate4.setOnClickListener {
             binding.ivRate1.setImageResource(R.drawable.ic_fullstar)
@@ -96,7 +96,7 @@ class RatingFragment : BaseFragment<FragmentRatingBinding>(R.layout.fragment_rat
             binding.ivRate4.setImageResource(R.drawable.ic_fullstar)
             binding.ivRate5.setImageResource(R.drawable.ic_emptystar)
             Toast.makeText(requireContext(), "4점", Toast.LENGTH_SHORT).show()
-            ratescore = 4
+            rateScore = 4.0F
         }
         binding.ivRate5.setOnClickListener {
             binding.ivRate1.setImageResource(R.drawable.ic_fullstar)
@@ -105,7 +105,7 @@ class RatingFragment : BaseFragment<FragmentRatingBinding>(R.layout.fragment_rat
             binding.ivRate4.setImageResource(R.drawable.ic_fullstar)
             binding.ivRate5.setImageResource(R.drawable.ic_fullstar)
             Toast.makeText(requireContext(), "5점", Toast.LENGTH_SHORT).show()
-            ratescore = 5
+            rateScore = 5.0F
         }
         binding.tvRate.setOnClickListener {
             binding.ivRate1.setImageResource(R.drawable.ic_emptystar)
@@ -116,7 +116,7 @@ class RatingFragment : BaseFragment<FragmentRatingBinding>(R.layout.fragment_rat
             Toast.makeText(requireContext(), "평가완료", Toast.LENGTH_SHORT).show()
         }
         binding.tvRate.setOnClickListener {
-            photo?.let { it -> viewModel.ratePhoto(it, ratescore) }
+            photo?.let { it -> viewModel.ratePhoto(it, rateScore) }
         }
         binding.tvNotRate.setOnClickListener {
             pageNum++

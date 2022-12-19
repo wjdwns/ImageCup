@@ -25,7 +25,7 @@ interface RemoteDataSource {
 
     suspend fun evaluationPhoto(
         evaluationPhoto: EvaluationPhotoRequest
-    ) : Flow<Message>
+    ) : Flow<Unit>
 
     suspend fun getRankingPhotos(
         label : String
