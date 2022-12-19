@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.imagecup.data.repository.Repository
 import com.example.imagecup.model.GetPhotosResponse
+import com.example.imagecup.model.GetRankingPhotosResponse
 import com.example.imagecup.model.Photo
 import com.example.imagecup.utils.PrefsManager
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -59,6 +60,10 @@ class MainViewModel @Inject constructor(
     private val _photoResponse: MutableStateFlow<GetPhotosResponse?> = MutableStateFlow(null)
     val photoResponse: StateFlow<GetPhotosResponse?>
         get() = _photoResponse
+
+    private val _rankResponse: MutableStateFlow<List<GetRankingPhotosResponse>?> = MutableStateFlow(null)
+    val rankResponse: StateFlow<List<GetRankingPhotosResponse>?>
+        get() = _rankResponse
 
     fun getAllLabels() {
         viewModelScope.launch {
@@ -128,6 +133,14 @@ class MainViewModel @Inject constructor(
                 }.onFailure {
                     Timber.e("$it")
                 }
+            }
+        }
+    }
+
+    fun getRankPhoto(label: String) {
+        viewModelScope.launch {
+            repository.getRankingPhotos(label).collectLatest {
+                    _rankResponse.value = it
             }
         }
     }

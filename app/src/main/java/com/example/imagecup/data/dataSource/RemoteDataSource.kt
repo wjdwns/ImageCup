@@ -29,6 +29,6 @@ interface RemoteDataSource {
 
     suspend fun getRankingPhotos(
         label : String
-    ) : Flow<GetRankingPhotosResponse>
+    ) : Flow<List<GetRankingPhotosResponse>>
 
 }
